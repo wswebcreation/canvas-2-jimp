@@ -1,0 +1,59 @@
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Performance test completed in 63.881 seconds.
+
+Found 215 images. Starting performance test with concurrency level 20.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Performance test completed in 63.389 seconds.
+
+Found 215 images. Starting performance test with concurrency level 5.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Performance test completed in 65.254 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 65.18 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 66.158 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 67.599 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 66.365 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 66.166 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 67.986 seconds.
