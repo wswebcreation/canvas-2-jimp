@@ -1,0 +1,36 @@
+# Altered the Canvas Lib to Jimp and compare 2 images
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 109.668 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 114.653 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 112.494 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 112.167 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 114.213 seconds.

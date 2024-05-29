@@ -1,0 +1,11 @@
+# only changed the Resemble Canvas implementation to Jimp
+Spec Files:      88 passed, 4 retries, 2 failed, 90 total (100% completed) in 00:10:30
+Spec Files:      88 passed, 4 retries, 2 failed, 90 total (100% completed) in 00:10:09                                                                                                        ─╯
+Spec Files:      87 passed, 6 retries, 3 failed, 90 total (100% completed) in 00:12:22
+Spec Files:      89 passed, 3 retries, 1 failed, 90 total (100% completed) in 00:10:30
+
+# now also altered webdriver-image-comparison image methods to jimp
+Spec Files:      85 passed, 14 retries, 5 failed, 90 total (100% completed) in 00:17:20
+
+# There seems to be a small modification I need to research, I now need to start with 0 retries and do it all over again
+

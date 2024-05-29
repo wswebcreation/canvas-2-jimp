@@ -1,0 +1,13 @@
+# only changed the Resemble Canvas implementation to Jimp
+Storybook Components:      184 passed, 0 total (0% completed) in 00:00:10 
+Storybook Components:      184 passed, 0 total (0% completed) in 00:00:09 
+Storybook Components:      184 passed, 0 total (0% completed) in 00:00:10 
+Storybook Components:      184 passed, 0 total (0% completed) in 00:00:07
+Storybook Components:      184 passed, 0 total (0% completed) in 00:00:07
+
+# now also altered webdriver-image-comparison image methods to jimp
+Storybook Components:      184 passed, 0 total (0% completed) in 00:00:08
+Storybook Components:      184 passed, 0 total (0% completed) in 00:00:08
+Storybook Components:      184 passed, 0 total (0% completed) in 00:00:07
+Storybook Components:      184 passed, 0 total (0% completed) in 00:00:07
+Storybook Components:      184 passed, 0 total (0% completed) in 00:00:07

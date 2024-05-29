@@ -1,0 +1,13 @@
+# only changed the Resemble Canvas implementation to Jimp
+Spec Files:      11 passed, 11 total (100% completed) in 00:03:06
+Spec Files:      11 passed, 11 total (100% completed) in 00:03:36
+Spec Files:      11 passed, 11 total (100% completed) in 00:04:00 
+Spec Files:      11 passed, 11 total (100% completed) in 00:03:28
+Spec Files:      11 passed, 11 total (100% completed) in 00:03:46  
+
+# now also altered webdriver-image-comparison image methods to jimp
+Spec Files:      11 passed, 11 total (100% completed) in 00:03:33 
+Spec Files:      11 passed, 11 total (100% completed) in 00:03:18 
+Spec Files:      11 passed, 11 total (100% completed) in 00:02:49
+Spec Files:      11 passed, 11 total (100% completed) in 00:03:30
+Spec Files:      11 passed, 11 total (100% completed) in 00:04:29 
