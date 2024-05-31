@@ -2,7 +2,7 @@ const async = require("async");
 const resemble = require("resemble-jimp");
 const fs = require("fs");
 
-let spinner;
+// let spinner;
 const logFilePath = "run.jimp.txt";
 
 const loadOra = async () => {
@@ -20,12 +20,22 @@ const readImagesFromDirectory = async (directoryPath) => {
 };
 
 const compareImages = (image1, image2) => {
+  // console.log("start compareImages");
+  // console.log("image1 = ", image1);
+  // console.log("image2 = ", image2);
+
   return new Promise((resolve, reject) => {
     resemble(image1)
       .compareTo(image2)
       .onComplete((data) => {
-        if (data) resolve(data);
-        else reject(new Error("Comparison failed"));
+        // console.log("onComplete data = ", data);
+        if (data) {
+          // console.log("Comparison complete, data: ", data);
+          resolve(data);
+        } else {
+          console.error("Comparison failed");
+          reject(new Error("Comparison failed"));
+        }
       });
   });
 };
@@ -45,6 +55,7 @@ const performPerformanceTest = async (images, concurrency) => {
       }
 
       const result = await compareImages(actualPath, baselinePath);
+      // console.log("result = ", result);
       processedCount++;
     } catch (error) {
       failedCount++;
@@ -58,7 +69,7 @@ const performPerformanceTest = async (images, concurrency) => {
 
   return new Promise((resolve) => {
     queue.drain(() => {
-      spinner.stop();
+      // spinner.stop();
       logToFile(
         logFilePath,
         `All image comparisons are done. 
@@ -74,18 +85,22 @@ const main = async () => {
   const imagesDirectory = "./images/actual";
   const concurrency = 10;
   const { logToFile } = await loadHelpers();
-  // const images = await readImagesFromDirectory(imagesDirectory);
-  const images = [
-    "./images/actual/android_googleapi_emulator/fullPage-EmulatorAndroidGoogleAPILandscapeChromeDriver10.0-640x384.png",
-  ];
+  const images = await readImagesFromDirectory(imagesDirectory);
+  // const images = [
+  //   "./images/actual/android_googleapi_emulator/fullPage-EmulatorAndroidGoogleAPILandscapeChromeDriver10.0-640x384.png",
+  // ];
   logToFile(
     logFilePath,
     `\nFound ${images.length} images. Starting performance test with concurrency level ${concurrency}.`
   );
-  const ora = await loadOra();
-  spinner = ora("Processing images...").start();
+  // const ora = await loadOra();
+  // spinner = ora("Processing images...").start();
   const startTime = Date.now();
-  await performPerformanceTest(images, concurrency);
+  try {
+    await performPerformanceTest(images, concurrency);
+  } catch (error) {
+    console.error(error);
+  }
   const endTime = Date.now();
   const duration = (endTime - startTime) / 1000;
   logToFile(logFilePath, "Done Processing images");

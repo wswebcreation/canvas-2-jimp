@@ -34,3 +34,24 @@ Processed: 215,
 Failed: 0
 Done Processing images
 Performance test completed in 114.213 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 264.482 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 139.015 seconds.
+
+Found 215 images. Starting performance test with concurrency level 10.
+All image comparisons are done. 
+Processed: 215, 
+Failed: 0
+Done Processing images
+Performance test completed in 262.893 seconds.

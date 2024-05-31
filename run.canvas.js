@@ -65,6 +65,9 @@ const main = async () => {
   const imagesDirectory = "./images/actual";
   const concurrency = 10;
   const images = readImagesFromDirectory(imagesDirectory);
+  // const images = [
+  //   "./images/actual/android_googleapi_emulator/fullPage-EmulatorAndroidGoogleAPILandscapeChromeDriver10.0-640x384.png",
+  // ];
   logToFile(
     logFilePath,
     `\nFound ${images.length} images. Starting performance test with concurrency level ${concurrency}.`

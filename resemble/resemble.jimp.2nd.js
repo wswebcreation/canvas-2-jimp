@@ -1,4 +1,10 @@
+/*
+James Cryer / Huddle
+URL: https://github.com/Huddle/Resemble.js
+*/
+
 var naiveFallback = function () {
+  // ISC (c) 2011-2019 https://github.com/medikoo/es5-ext/blob/master/global.js
   if (typeof self === "object" && self) {
     return self;
   }
@@ -9,6 +15,8 @@ var naiveFallback = function () {
 };
 
 var getGlobalThis = function () {
+  // ISC (c) 2011-2019 https://github.com/medikoo/es5-ext/blob/master/global.js
+  // Fallback to standard globalThis if available
   if (typeof globalThis === "object" && globalThis) {
     return globalThis;
   }
@@ -24,10 +32,11 @@ var getGlobalThis = function () {
     return naiveFallback();
   }
   try {
+    // eslint-disable-next-line no-undef
     if (!__global__) {
       return naiveFallback();
     }
-    return __global__;
+    return __global__; // eslint-disable-line no-undef
   } finally {
     delete Object.prototype.__global__;
   }
@@ -51,7 +60,7 @@ var isNode = function () {
   } else {
     root.resemble = factory();
   }
-})(this, function () {
+})(this /* eslint-disable-line no-invalid-this*/, function () {
   "use strict";
 
   var Img;
@@ -59,23 +68,17 @@ var isNode = function () {
   var loadNodeCanvasImage;
 
   if (isNode()) {
-    // console.log("Running in Node.js");
-    const { CanvasWrapper, ImageWrapper } = require("./canvas2jimp.js");
+    console.log("Running in Node.js");
+    const { CanvasWrapper, ImageWrapper } = require("./canvas2jimp.js"); // eslint-disable-line global-require
     Canvas = CanvasWrapper;
     Img = ImageWrapper;
     loadNodeCanvasImage = async (src) => {
-      //   console.log("Starting loadNodeCanvasImage with src:", src);
       const img = new ImageWrapper();
       await img.load(src);
-      //   console.log("Image loaded in loadNodeCanvasImage:", img);
       return img;
     };
   } else {
     Img = Image;
-  }
-
-  if (isNode() && !Img) {
-    console.error("ImageWrapper is not defined correctly");
   }
 
   function createCanvas(width, height) {
@@ -93,17 +96,18 @@ var isNode = function () {
   var globalOutputSettings = oldGlobalSettings;
 
   var resemble = function (fileData) {
-    // console.log("resemble called with fileData:", fileData);
+    console.log("resemble called with fileData:", fileData);
     var pixelTransparency = 1;
 
     var errorPixelColor = {
+      // Color for Error Pixels. Between 0 and 255.
       red: 255,
       green: 0,
       blue: 255,
       alpha: 255,
     };
 
-    var targetPix = { r: 0, g: 0, b: 0, a: 0 };
+    var targetPix = { r: 0, g: 0, b: 0, a: 0 }; // isAntialiased
 
     var errorPixelTransform = {
       flat: function (px, offset) {
@@ -161,6 +165,7 @@ var isNode = function () {
     var updateCallbackArray = [];
 
     var tolerance = {
+      // between 0 and 255
       red: 16,
       green: 16,
       blue: 16,
@@ -309,42 +314,31 @@ var isNode = function () {
     }
 
     function onLoadImage(hiddenImage, callback) {
-      //   console.log("onLoadImage called with hiddenImage:", hiddenImage);
+      console.log("onLoadImage called with hiddenImage:", hiddenImage);
+      // don't assign to hiddenImage, see https://github.com/Huddle/Resemble.js/pull/87/commits/300d43352a2845aad289b254bfbdc7cd6a37e2d7
       var width = hiddenImage.width;
       var height = hiddenImage.height;
-
-      //   console.log("Image dimensions:", { width, height });
 
       if (scaleToSameSize && images.length === 1) {
         width = images[0].width;
         height = images[0].height;
-        // console.log("Scaling to same size:", { width, height });
       }
 
       var hiddenCanvas = createCanvas(width, height);
       var imageData;
 
-      try {
-        hiddenCanvas
-          .getContext("2d")
-          .drawImage(hiddenImage, 0, 0, width, height);
-        imageData = hiddenCanvas
-          .getContext("2d")
-          .getImageData(0, 0, width, height);
-        // console.log("Image data extracted:", imageData);
-      } catch (error) {
-        // console.error("Error extracting image data:", error);
-        return;
-      }
+      hiddenCanvas.getContext("2d").drawImage(hiddenImage, 0, 0, width, height);
+      imageData = hiddenCanvas
+        .getContext("2d")
+        .getImageData(0, 0, width, height);
 
       images.push(imageData);
 
-      //   console.log("Image data parsed successfully, invoking callback");
       callback(imageData, width, height);
     }
 
     function loadImageData(fileDataForImage, callback) {
-      //   console.log("Loading image data:", fileDataForImage);
+      console.log("Loading image data:", fileDataForImage);
       var fileReader;
       var hiddenImage = new Img();
 
@@ -358,26 +352,21 @@ var isNode = function () {
 
       hiddenImage.onerror = function (event) {
         hiddenImage.onload = null;
-        hiddenImage.onerror = null;
+        hiddenImage.onerror = null; // fixes pollution between calls
         const error = event ? event + "" : "Unknown error";
         images.push({
           error: `Failed to load image '${fileDataForImage}'. ${error}`,
         });
-        console.error(
-          `Failed to load image: ${fileDataForImage}, error: ${error}`
-        );
         callback();
       };
 
       hiddenImage.onload = function () {
-        hiddenImage.onload = null;
+        hiddenImage.onload = null; // fixes pollution between calls
         hiddenImage.onerror = null;
-        // console.log(`Image loaded successfully: ${fileDataForImage}`);
         onLoadImage(hiddenImage, callback);
       };
 
       if (typeof fileDataForImage === "string") {
-        // console.log("Image source is a string. Setting src:", fileDataForImage);
         hiddenImage.src = fileDataForImage;
         if (!isNode() && hiddenImage.complete && hiddenImage.naturalWidth > 0) {
           hiddenImage.onload();
@@ -387,8 +376,8 @@ var isNode = function () {
         typeof fileDataForImage.width === "number" &&
         typeof fileDataForImage.height === "number"
       ) {
-        // console.log("Image data provided directly:", fileDataForImage);
         images.push(fileDataForImage);
+
         callback(
           fileDataForImage,
           fileDataForImage.width,
@@ -398,21 +387,19 @@ var isNode = function () {
         typeof Buffer !== "undefined" &&
         fileDataForImage instanceof Buffer
       ) {
-        // console.log("Image source is a Buffer. Loading image...");
+        // If we have Buffer, assume we're on Node+Canvas and its supported
+        // hiddenImage.src = fileDataForImage;
+
         loadNodeCanvasImage(fileDataForImage)
           .then(function (image) {
-            hiddenImage.onload = null;
+            hiddenImage.onload = null; // fixes pollution between calls
             hiddenImage.onerror = null;
-            // console.log(
-            //   `Image loaded successfully from Buffer: ${fileDataForImage}`
-            // );
             onLoadImage(image, callback);
           })
           .catch(function (err) {
             images.push({
               error: err ? err + "" : "Image load error.",
             });
-            console.error(`Error loading image from Buffer: ${err}`);
             callback();
           });
       } else {
@@ -486,7 +473,7 @@ var isNode = function () {
       var d;
 
       if (max === min) {
-        h = 0;
+        h = 0; // achromatic
       } else {
         d = max - min;
         switch (max) {
@@ -528,7 +515,7 @@ var isNode = function () {
       for (i = distance * -1; i <= distance; i++) {
         for (j = distance * -1; j <= distance; j++) {
           if (i === 0 && j === 0) {
-            continue;
+            // ignore source pixel
           } else {
             offset = ((verticalPos + j) * width + (horizontalPos + i)) * 4;
 
@@ -570,10 +557,10 @@ var isNode = function () {
         return;
       }
 
-      px[offset] = pix.r;
-      px[offset + 1] = pix.g;
-      px[offset + 2] = pix.b;
-      px[offset + 3] = pix.a * pixelTransparency;
+      px[offset] = pix.r; // r
+      px[offset + 1] = pix.g; // g
+      px[offset + 2] = pix.b; // b
+      px[offset + 3] = pix.a * pixelTransparency; // a
     }
 
     function copyGrayScalePixel(px, offset, pix) {
@@ -581,10 +568,10 @@ var isNode = function () {
         return;
       }
 
-      px[offset] = pix.brightness;
-      px[offset + 1] = pix.brightness;
-      px[offset + 2] = pix.brightness;
-      px[offset + 3] = pix.a * pixelTransparency;
+      px[offset] = pix.brightness; // r
+      px[offset + 1] = pix.brightness; // g
+      px[offset + 2] = pix.brightness; // b
+      px[offset + 3] = pix.a * pixelTransparency; // a
     }
 
     function getPixelInfo(dst, pix, offset) {
@@ -601,7 +588,7 @@ var isNode = function () {
     }
 
     function addBrightnessInfo(pix) {
-      pix.brightness = getBrightness(pix.r, pix.g, pix.b);
+      pix.brightness = getBrightness(pix.r, pix.g, pix.b); // 'corrected' lightness
     }
 
     function addHueInfo(pix) {
@@ -609,7 +596,7 @@ var isNode = function () {
     }
 
     function analyseImages(img1, img2, width, height) {
-      //   console.log("Analyzing images:", { width, height });
+      console.log("Analyzing images:", { width, height });
       var data1 = img1.data;
       var data2 = img2.data;
       var hiddenCanvas;
@@ -619,7 +606,7 @@ var isNode = function () {
 
       if (!compareOnly) {
         hiddenCanvas = createCanvas(width, height);
-        // console.log("Created hidden canvas:", hiddenCanvas);
+        console.log("Created hidden canvas:", hiddenCanvas);
         context = hiddenCanvas.getContext("2d");
         imgd = context.createImageData(width, height);
         pix = imgd.data;
@@ -662,6 +649,7 @@ var isNode = function () {
         }
 
         if (skip) {
+          // only skip if the image isn't small
           if (verticalPos % skip === 0 || horizontalPos % skip === 0) {
             return;
           }
@@ -711,7 +699,7 @@ var isNode = function () {
           }
         } else if (
           ignoreAntialiasing &&
-          (addBrightnessInfo(pixel1),
+          (addBrightnessInfo(pixel1), // jit pixel info augmentation looks a little weird, sorry.
           addBrightnessInfo(pixel2),
           isAntialiased(pixel1, data1, 1, verticalPos, horizontalPos, width) ||
             isAntialiased(pixel2, data2, 2, verticalPos, horizontalPos, width))
@@ -784,7 +772,7 @@ var isNode = function () {
           return hiddenCanvas.toBuffer();
         };
       }
-      //   console.log("Analysis complete");
+      console.log("Analysis complete");
     }
 
     function addLabel(text, context, hiddenCanvas) {
@@ -885,21 +873,18 @@ var isNode = function () {
     }
 
     function compare(one, two) {
-      //   console.log("Comparing images:", { one, two });
+      console.log("Comparing images:", { one, two });
       if (globalOutputSettings !== oldGlobalSettings) {
         outputSettings(globalOutputSettings);
       }
 
       function onceWeHaveBoth() {
-        // console.log("Checking if both images are loaded");
         var width;
         var height;
         if (images.length === 2) {
-          //   console.log("Both images are loaded, proceeding with comparison");
           if (images[0].error || images[1].error) {
             data = {};
             data.error = images[0].error ? images[0].error : images[1].error;
-            console.error("Error in one of the images:", data.error);
             triggerDataUpdate();
             return;
           }
@@ -926,7 +911,6 @@ var isNode = function () {
             height: images[0].height - images[1].height,
           };
 
-          //   console.log("Analyzing images");
           analyseImages(
             normalise(images[0], width, height),
             normalise(images[1], width, height),
@@ -934,7 +918,6 @@ var isNode = function () {
             height
           );
 
-          //   console.log("Triggering data update after analysis");
           triggerDataUpdate();
         }
       }
@@ -948,12 +931,12 @@ var isNode = function () {
       var secondFileData;
       var hasMethod = typeof param === "function";
 
-      //   console.log(
-      //     "getCompareApi called with param:",
-      //     param,
-      //     "hasMethod:",
-      //     hasMethod
-      //   );
+      console.log(
+        "getCompareApi called with param:",
+        param,
+        "hasMethod:",
+        hasMethod
+      );
 
       if (!hasMethod) {
         // assume it's file data
@@ -1098,14 +1081,14 @@ var isNode = function () {
 
     var rootSelf = {
       onComplete: function (callback) {
-        // console.log("onComplete called with callback:", callback);
+        console.log("onComplete called with callback:", callback);
         updateCallbackArray.push(callback);
         loadImageData(fileData, function (imageData, width, height) {
           parseImage(imageData.data, width, height);
         });
       },
       compareTo: function (secondFileData) {
-        // console.log("Comparing to:", secondFileData);
+        console.log("Comparing to:", secondFileData);
         return getCompareApi(secondFileData);
       },
       outputSettings: function (options) {
